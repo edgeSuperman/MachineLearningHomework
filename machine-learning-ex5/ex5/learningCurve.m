@@ -53,10 +53,29 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
+[m n] = size(X);
+[mv nv] = size(Xval);
 
-
-
-
+lambdaP = 0;
+for i = 1:m 
+    
+    Xtrain = X(1: i, 1 : n);
+    Xvalidate = Xval(1: i, 1 : nv);
+    
+    ytrain = y(1: i, 1 : 1);
+    yvalidate = yval(1: i, 1 : 1);
+    
+    [thetaTrain] = trainLinearReg(Xtrain, ytrain, lambda);
+    
+    Jtrain = linearRegCostFunction(Xtrain, ytrain, thetaTrain, lambdaP);
+    
+    %这个地方要计算所有的21个 X 元素的 并不是说，各取12个。。。。 
+    %变量是不停的增加训练元素的数量，来提升西塔，然后用所有的valid组去验证
+    JValidate = linearRegCostFunction(Xval, yval, thetaTrain, lambdaP);
+    
+    error_train(i) = Jtrain;
+    error_val(i) = JValidate;
+end
 
 
 % -------------------------------------------------------------
